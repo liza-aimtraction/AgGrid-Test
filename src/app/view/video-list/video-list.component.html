@@ -1,0 +1,53 @@
+<div class="content" *ngIf="(videos$ | async) as videos">
+    <ag-grid-angular
+        class="ag-theme-alpine table"
+        [modules]="agGridModules"
+        [rowData]="videos"
+        [gridOptions]="gridOptions"
+        (gridReady)="gridReady($event)"
+        >
+    </ag-grid-angular>
+</div>
+
+
+<ng-template #header>
+    <div class="toolbar">
+        <div>
+            <input type="checkbox" (change)="toggleSelection($event.target.checked)">
+            Selection mode
+        </div>
+        <div>
+          <span>Total records: {{ (videos$ | async)?.length }}</span>
+        </div>
+        <div>
+          <span>Selected records: {{ gridOptions.api.getSelectedRows().length }} </span>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #headerCheckbox>
+    <input type="checkbox" 
+        [checked]="isAllSelected()"
+        (change)="toggleAllRows($event.target.checked)"
+    >
+</ng-template>
+
+<ng-template #cellCheckbox let-video>
+    <input type="checkbox"
+        [checked]="isSelected(video.id.videoId)"
+        (change)="toggleRow($event.target.checked, video.id.videoId)"
+    >
+</ng-template>
+
+<ng-template #thumbnails let-video>
+    <img 
+    [width]="video.snippet.thumbnails.default.width"
+    [height]="video.snippet.thumbnails.default.height"
+    [src]="video.snippet.thumbnails.default.url">
+</ng-template>
+
+<ng-template #title let-video>
+    <a [href]="'https://www.youtube.com/watch?v=' + video.id.videoId" target="_blank">
+        {{video.snippet.title}}
+    </a>
+</ng-template>

@@ -11,6 +11,10 @@
   },
   "private": true,
   "dependencies": {
+    "@ag-grid-community/all-modules": "23.2.0",
+    "@ag-grid-community/angular": "23.2.0",
+    "@ag-grid-enterprise/menu": "23.2.0",
+    "@ag-grid-enterprise/clipboard": "23.2.0",
     "@angular/animations": "~10.2.0",
     "@angular/common": "~10.2.0",
     "@angular/compiler": "~10.2.0",
