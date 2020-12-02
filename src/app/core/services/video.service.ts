@@ -6,9 +6,7 @@ import { VideoItem } from '../models/video-item';
 import { environment } from 'src/environments/environment';
 import { SearchList } from '../models/search-list';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class VideoService {
 
   constructor(private http: HttpClient) { }

@@ -24,6 +24,7 @@ import { VideoListComponent } from './view/video-list/video-list.component';
     BrowserAnimationsModule,
     AgGridModule.withComponents([TemplateRendererComponent])
   ],
-  bootstrap: [AppComponent],
+  providers: [VideoService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

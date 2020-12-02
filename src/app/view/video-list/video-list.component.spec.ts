@@ -130,7 +130,7 @@ describe('VideoListComponent', () => {
   });
 
   it('should have expected column headers', async() => {
-    component.gridReady(component.gridOptions)
+    component.gridReady(component.gridOptions);
     await fixture.isStable();
     const elm = fixture.nativeElement;
     const grid = elm.querySelector('ag-grid-angular');
