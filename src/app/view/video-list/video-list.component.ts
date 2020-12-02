@@ -1,12 +1,13 @@
+import { catchError } from 'rxjs/operators';
 import { ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TemplateRendererComponent } from '../template-renderer/template-renderer.component';
-import { Observable } from 'rxjs';
-import { AllCommunityModules, ColGroupDef, GetContextMenuItemsParams, GridOptions, Module, ColDef } from '@ag-grid-community/all-modules';
+import { AllCommunityModules, ColGroupDef, GetContextMenuItemsParams, GridOptions, Module } from '@ag-grid-community/all-modules';
 import { MenuModule } from '@ag-grid-enterprise/menu';
 import { VideoService } from 'src/app/core/services/video.service';
 import { ClipboardModule } from '@ag-grid-enterprise/clipboard';
 import { VideoItem } from 'src/app/core/models/video-item';
 import { DatePipe } from '@angular/common';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-video-list',
@@ -22,6 +23,7 @@ export class VideoListComponent implements OnInit {
   @ViewChild('thumbnails') thumbnails: TemplateRef<any>;
   @ViewChild('title') title: TemplateRef<any>;
 
+  error$: BehaviorSubject<any> = new BehaviorSubject(null);
   videos$: Observable<VideoItem[]> = new Observable(null);
   agGridModules: Module[] = [...AllCommunityModules, MenuModule, ClipboardModule];
   gridOptions: GridOptions = {
@@ -40,10 +42,15 @@ export class VideoListComponent implements OnInit {
   constructor(
     private service: VideoService,
     private datePipe: DatePipe
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.videos$ = this.service.getVideoList();
+    this.videos$ = this.service.getVideoList().pipe(
+      catchError(err => {
+        this.error$.next(err.error.error);
+        return [];
+      })
+    );
   }
 
   createColumnDefs(): ColGroupDef[] {

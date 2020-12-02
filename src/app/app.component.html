@@ -1,2 +1,6 @@
+<div *ngIf="(online$ | async) == false" class="alert">
+    <strong>Error!</strong> You're not connected to internet.
+</div>
+
 <h1>VIDEO LIST</h1>
 <router-outlet></router-outlet>
