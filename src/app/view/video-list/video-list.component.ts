@@ -66,26 +66,31 @@ export class VideoListComponent implements OnInit {
           cellRendererParams: { ngTemplate: this.cellCheckbox },
           width: 50,
           hide: true,
+          lockPinned: true
         },
         {
           colId: 'thumbnails',
           cellRendererFramework: TemplateRendererComponent,
-          cellRendererParams: { ngTemplate: this.thumbnails }
+          cellRendererParams: { ngTemplate: this.thumbnails },
+          lockPinned: true
         },
         {
           headerName: 'Published on',
           field: 'snippet.publishedAt',
-          cellRenderer: date => this.transform(date.value)
+          cellRenderer: date => this.transform(date.value),
+          lockPinned: true
         },
         {
           headerName: 'Video Title',
           colId: 'title',
           cellRendererFramework: TemplateRendererComponent,
-          cellRendererParams: { ngTemplate: this.title }
+          cellRendererParams: { ngTemplate: this.title },
+          lockPinned: true
         },
         {
           headerName: 'Description',
-          field: 'snippet.description'
+          field: 'snippet.description',
+          lockPinned: true
         },
       ]
     }];
