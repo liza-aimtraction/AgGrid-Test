@@ -1,11 +1,5 @@
-import { AgGridModule } from '@ag-grid-community/angular';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TemplateRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
-import { VideoService } from 'src/app/core/services/video.service';
-import { mockVideoList } from 'src/app/core/testing-mock';
-import { VideoListComponent } from '../video-list/video-list.component';
 import { TemplateRendererComponent } from './template-renderer.component';
 
 describe('VideoListComponent', () => {

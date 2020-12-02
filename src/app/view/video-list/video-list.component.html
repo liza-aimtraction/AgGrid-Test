@@ -43,7 +43,8 @@
     <img 
     [width]="video.snippet.thumbnails.default.width"
     [height]="video.snippet.thumbnails.default.height"
-    [src]="video.snippet.thumbnails.default.url">
+    [src]="video.snippet.thumbnails.default.url"
+    [alt]="video.snippet.title">
 </ng-template>
 
 <ng-template #title let-video>

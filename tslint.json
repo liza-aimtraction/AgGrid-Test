@@ -3,6 +3,7 @@
   "rules": {
     "indent": [true, "spaces", 2],
     "typedef": [true, "call-signature", "parameter", "member-variable-declaration"],
+    "curly": [true, "ignore-same-line"],
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {

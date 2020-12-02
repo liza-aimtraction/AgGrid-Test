@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 
 import { VideoService } from './video.service';
-import { mockResponse } from '../testing-mock';
+import { mockResponse } from '../testing-mock.spec';
 
 describe('VideoService', () => {
   let service: VideoService;

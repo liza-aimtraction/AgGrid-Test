@@ -1,17 +1,18 @@
-import { VideoItem } from './../../core/models/video-item';
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TemplateRendererComponent } from '../template-renderer/template-renderer.component';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { AllCommunityModules, ColDef, ColGroupDef, GetContextMenuItemsParams, GridOptions, Module } from '@ag-grid-community/all-modules';
+import { Observable } from 'rxjs';
+import { AllCommunityModules, ColGroupDef, GetContextMenuItemsParams, GridOptions, Module, ColDef } from '@ag-grid-community/all-modules';
 import { MenuModule } from '@ag-grid-enterprise/menu';
 import { VideoService } from 'src/app/core/services/video.service';
 import { ClipboardModule } from '@ag-grid-enterprise/clipboard';
-
+import { VideoItem } from 'src/app/core/models/video-item';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-video-list',
   templateUrl: './video-list.component.html',
   styleUrls: ['./video-list.component.scss'],
+  providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VideoListComponent implements OnInit {
@@ -21,7 +22,7 @@ export class VideoListComponent implements OnInit {
   @ViewChild('thumbnails') thumbnails: TemplateRef<any>;
   @ViewChild('title') title: TemplateRef<any>;
 
-
+  videos$: Observable<VideoItem[]> = new Observable(null);
   agGridModules: Module[] = [...AllCommunityModules, MenuModule, ClipboardModule];
   gridOptions: GridOptions = {
     defaultColDef: {
@@ -30,15 +31,16 @@ export class VideoListComponent implements OnInit {
     rowSelection: 'multiple',
     rowHeight: 90,
     suppressRowClickSelection: true,
-    suppressContextMenu: false,
+    suppressMovableColumns: true,
     popupParent: document.querySelector('body'),
     getRowNodeId: (data: VideoItem) => data.id.videoId,
     getContextMenuItems: this.getContextMenuItems,
   };
 
-  videos$: Observable<VideoItem[]> = new Observable(null);
-
-  constructor(private service: VideoService) { }
+  constructor(
+    private service: VideoService,
+    private datePipe: DatePipe
+  ) {}
 
   ngOnInit(): void {
     this.videos$ = this.service.getVideoList();
@@ -46,35 +48,39 @@ export class VideoListComponent implements OnInit {
 
   createColumnDefs(): ColGroupDef[] {
     return [{
-        headerGroupComponentFramework: TemplateRendererComponent,
-        headerGroupComponentParams: { ngTemplate: this.header },
-        children: [
-          {
-            colId: 'checkbox', width: 50, hide: true,
-            headerComponentFramework: TemplateRendererComponent,
-            headerComponentParams: { ngTemplate: this.headerCheckbox },
-            cellRendererFramework: TemplateRendererComponent,
-            cellRendererParams: { ngTemplate: this.cellCheckbox }
-          },
-          {
-            colId: 'thumbnails',
-            cellRendererFramework: TemplateRendererComponent,
-            cellRendererParams: { ngTemplate: this.thumbnails }
-          },
-          {
-            headerName: 'Published on',
-            field: 'snippet.publishedAt'
-          },
-          {
-            headerName: 'Video Title', colId: 'title',
-            cellRendererFramework: TemplateRendererComponent,
-            cellRendererParams: { ngTemplate: this.title }
-          },
-          {
-            headerName: 'Description',
-            field: 'snippet.description'
-          },
-        ]
+      headerGroupComponentFramework: TemplateRendererComponent,
+      headerGroupComponentParams: { ngTemplate: this.header },
+      children: [
+        {
+          colId: 'checkbox',
+          headerComponentFramework: TemplateRendererComponent,
+          headerComponentParams: { ngTemplate: this.headerCheckbox },
+          cellRendererFramework: TemplateRendererComponent,
+          cellRendererParams: { ngTemplate: this.cellCheckbox },
+          width: 50,
+          hide: true,
+        },
+        {
+          colId: 'thumbnails',
+          cellRendererFramework: TemplateRendererComponent,
+          cellRendererParams: { ngTemplate: this.thumbnails }
+        },
+        {
+          headerName: 'Published on',
+          field: 'snippet.publishedAt',
+          cellRenderer: date => this.transform(date.value)
+        },
+        {
+          headerName: 'Video Title',
+          colId: 'title',
+          cellRendererFramework: TemplateRendererComponent,
+          cellRendererParams: { ngTemplate: this.title }
+        },
+        {
+          headerName: 'Description',
+          field: 'snippet.description'
+        },
+      ]
     }];
   }
 
@@ -87,12 +93,13 @@ export class VideoListComponent implements OnInit {
   }
 
   getContextMenuItems(params: GetContextMenuItemsParams): any[] {
-    const result: any[] = ['copy', 'copyWithHeaders'];
-    if(params.column.getColDef().headerName === 'Video Title')
+    const result: any[] = ['copy', 'copyWithHeaders', 'paste'];
+    if(params.column.getColDef().colId === 'title') {
       result.push({
         name: 'Open in new tab',
         action: () => { window.open(`https://www.youtube.com/watch?v=${params.node.data.id.videoId}`); },
       });
+    }
     return result;
   }
 
@@ -110,12 +117,16 @@ export class VideoListComponent implements OnInit {
   }
 
   isAllSelected(): boolean {
-   return this.gridOptions.api.getSelectedRows().length === this.gridOptions.api.getDisplayedRowCount();
+    return this.gridOptions.api.getSelectedRows().length === this.gridOptions.api.getDisplayedRowCount();
   }
 
   gridReady($event: GridOptions): void {
     $event.api.setColumnDefs(this.createColumnDefs());
     $event.api.sizeColumnsToFit();
+  }
+
+  transform(date: string | Date): string{
+    return this.datePipe.transform(date, 'dd-MM-yyyy, HH:mm');
   }
 
 }

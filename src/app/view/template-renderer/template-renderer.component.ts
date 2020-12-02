@@ -1,4 +1,3 @@
-import { ICellRendererParams } from '@ag-grid-community/all-modules';
 import { ICellRendererAngularComp } from '@ag-grid-community/angular';
 import { Component, TemplateRef } from '@angular/core';
 

@@ -1,4 +1,4 @@
 export interface PageInfo {
-	totalResults: number;
-	resultsPerPage: number;
+  totalResults: number;
+  resultsPerPage: number;
 }

@@ -1,3 +1,4 @@
+import { VideoService } from 'src/app/core/services/video.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
@@ -10,7 +11,6 @@ import { FormsModule } from '@angular/forms';
 
 import { TemplateRendererComponent } from './view/template-renderer/template-renderer.component';
 import { VideoListComponent } from './view/video-list/video-list.component';
-import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -19,14 +19,11 @@ import { CommonModule } from '@angular/common';
     TemplateRendererComponent,
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    FormsModule,
     AgGridModule.withComponents([TemplateRendererComponent])
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

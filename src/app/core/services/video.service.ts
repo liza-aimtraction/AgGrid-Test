@@ -1,10 +1,10 @@
-import { SearchList } from './../models/search-list';
-import { environment } from './../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { VideoItem } from '../models/video-item';
+import { environment } from 'src/environments/environment';
+import { SearchList } from '../models/search-list';
 
 @Injectable({
   providedIn: 'root'
