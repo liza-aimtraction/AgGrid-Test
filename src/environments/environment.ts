@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  youtubeUrl: 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyAPuZ4Q3Xttt2JOTpZ0u0b_VYY8LR6d4xk&maxResults=2&type=video&part=snippet&q=ang'
+  youtubeUrl: 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyAPuZ4Q3Xttt2JOTpZ0u0b_VYY8LR6d4xk&maxResults=30&type=video&part=snippet&q=angular'
 };
 
 /*
